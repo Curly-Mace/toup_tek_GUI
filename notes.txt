@@ -1,0 +1,17 @@
+Add ATR585M camera frame callback and thread-safe frame buffer"
+
+ "Finds the toupcam SDK files in the same folder as the script.
+ Creates shared variables so the camera thread and display thread can
+safely pass frames to each other without clashing.
+the shared variables are:
+1) latest_frame - holds the actual image data. The camera thread writes a new frame into it, the display thread reads it to show on screen.
+2) frame_ready - a flag, the camera thread is set to say "new fram is ready", the dissplay thread waits on the confirmation
+and starts when it is set
+3)frame_lock - lock that makes sure that the camera thread and display thread do not clash"
+
+When a new frame arrives from the camera, grabs the raw pixel data,
+converts it from 16-bit to 8-bit so it can be displayed, and signals
+the main loop that a frame is ready.
+
+When the camera is unplugged, prints a message and wakes the main loop
+so the program can exit cleanly."
